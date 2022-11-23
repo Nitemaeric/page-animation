@@ -1,24 +1,56 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion'
 
 function App() {
+  const [page, setPage] = useState(0)
+
+  const pages = [
+    <div>
+      Page 1
+    </div>,
+
+    <div>
+      Page 2
+    </div>,
+
+    <div>
+      Page 3
+    </div>,
+  ];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <AnimatePresence mode="wait" initial={false}>
+      <div className="h-screen flex flex-col justify-center items-center">
+        <motion.div
+          key={page}
+          initial={{ opacity: 0, x: -200 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 200 }}
+          transition={{ duration: 3 }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          {pages[page]}
+        </motion.div>
+
+        <div className="flex gap-3">
+          <button
+            className="mt-3 px-2 py-1 rounded bg-gray-300 hover:bg-gray-400"
+            onClick={() =>
+              setPage((page) => (page - 1 + pages.length) % pages.length)
+            }
+          >
+            Prev Page
+          </button>
+
+          <button
+            className="mt-3 px-2 py-1 rounded bg-gray-300 hover:bg-gray-400"
+            onClick={() => setPage((page) => (page + 1) % pages.length)}
+          >
+            Next Page
+          </button>
+        </div>
+      </div>
+    </AnimatePresence>
   );
 }
 
